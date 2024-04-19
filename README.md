@@ -85,7 +85,7 @@ To launch Gazebo worls use the following commands. Change `catkin_ws` depending 
 ```
 $ cd ~/catkin_ws
 $ source devel/setup.bash
-$ roslaunch turtlebot3_gazebo <lauch_file_name>.launch
+$ roslaunch turtlebot3_gazebo <launch_file_name>.launch
 ```
 
 To teleoperate the turtlebot use the following commands. Change `catkin_ws` depending on your setup.
