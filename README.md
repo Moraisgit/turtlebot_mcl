@@ -1,6 +1,6 @@
 # turtlebot_mcl_localization
 
-**A Monte Carlo Localization (MCL) algorithm developed by students for the Autonomous Systems [SAut] subject lectured at Instituto Superior Técnico (IST).**
+**A Monte Carlo Localization (MCL) algorithm developed by students for the Autonomous Systems (SAut) subject lectured at Instituto Superior Técnico (IST).**
 
 ## Menu
 
@@ -32,6 +32,8 @@ Several datasets were recorded and are available [here](https://drive.google.com
 ### Setting up the Gazebo Environment
 
 - **Install Dependant ROS Packages**
+
+What is explained next is more detailed documented [here](https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/).
 
 For ROS Melodic:
 ```
@@ -68,8 +70,6 @@ $ sudo apt install ros-noetic-turtlebot3
 ```
 
 - **How to use**
-
-What is explained next is more detailed documented [here](https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/).
 
 Use the following commands to download and compile the package of turtlebot Gazebo environments. Change `catkin_ws` depending on your setup. Change `<distro>` depending on your ROS distribution.
 ```
@@ -115,6 +115,7 @@ $ cd ..
 $ catkin build
 ```
 - **How to use**
+
 It is considered that the Gazebo environments mentioned earlier are set up.
 
 Before launching anything, make sure to have a `roscore` running.
@@ -131,9 +132,9 @@ To visualize the map on Rviz, click on "Add"->"By topic"->"Map"->"OK" and then "
     <img src="./repo-images/rviz_change.png" alt="drawing" width="800"/>
 </p>
 
-Then save the Rviz configuration with "File"->"Save Config As" and ovewrite the file `turtlebot3_gazebo_model.rviz`.
+Then save the Rviz configuration with "File"->"Save Config As" and overwrite the file `turtlebot3_gazebo_model.rviz`.
 
-To start seeing a map being built, play a dataset with the following command. Change `datasets` and `<rosbag_file_name>` according to where you have the datasets stored and the name of the files you have. The flag `-r 3` will increase the speed that the rosbag is played.
+To start seeing a map being built, play a dataset with the following command. Change `datasets` and `<rosbag_file_name>` according to where you have the datasets stored and the name of the file you intend to play. The flag `-r 3` will increase the speed that the rosbag is played.
 ```
 $ cd ~/datasets
 $ rosbag play <rosbag_file_name>.bag -r 3
