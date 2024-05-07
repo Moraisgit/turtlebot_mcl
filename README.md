@@ -1,4 +1,4 @@
-# turtlebot_mcl_localization
+# turtlebot_mcl
 
 **A Monte Carlo Localization (MCL) algorithm developed by students for the Autonomous Systems (SAut) subject lectured at Instituto Superior Técnico (IST).**
 
@@ -10,6 +10,7 @@
   - [**Important Tools**](#important-tools)
     - [**Setting up the Gazebo Environment**](#setting-up-the-gazebo-environment)
     - [**Gmapping**](#gmapping)
+    - [**AMCL**](#amcl)
 
 ## Prerequisites
 - [Ubuntu](https://ubuntu.com/download) (tested with 18.04 and 20.04)
@@ -137,3 +138,27 @@ To start seeing a map being built, play a dataset with the following command. Ch
 $ cd ~/datasets
 $ rosbag play <rosbag_file_name>.bag -r 3
 ```
+
+### AMCL
+
+For groundtruth one can use the [AMCL](https://wiki.ros.org/amcl) ROS package.
+
+To have the needed dependencies please follow what is documented at [**Setting up the Gazebo Environment**](#setting-up-the-gazebo-environment). If you have done so, please check that you have the following directory on your local machine `/opt/ros/<ros_distro>/share/turtlebot3_navigation`. Inside it you should have a directory `launch` with three launch files and we will be using the `turtlebot3_navigation.launch` file.
+
+Before launching anything, make sure to have a `roscore` running.
+
+Use the following commands to run AMCL. Change `/path/to/map.yaml` depending on your setup.
+```
+$ cd
+$ roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=/path/to/map.yaml
+```
+
+To start seeing particles in Rviz play a dataset with the following command. Change `datasets` and `<rosbag_file_name>` according to where you have the datasets stored and the name of the file you intend to play. The flag `-r 0.05` will decrease the speed that the rosbag is played so one can give a good pose estimate.
+```
+$ cd ~/datasets
+$ rosbag play <rosbag_file_name>.bag -r 0.05
+```
+
+After ensuring a good initial pose estimate one can increase the velocity at which your bag file is played. See the attached video for visual help on how to do it.
+
+![AMCL](https://github.com/Moraisgit/turtlebot_mcl/assets/114250545/613b835f-f0d5-4a82-860e-5ae17fd24c5e)
