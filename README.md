@@ -1,4 +1,4 @@
-# turtlebot_mcl_localization
+# turtlebot_mcl
 
 **A Monte Carlo Localization (MCL) algorithm developed by students for the Autonomous Systems (SAut) subject lectured at Instituto Superior Técnico (IST).**
 
