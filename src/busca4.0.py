@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Versão a funcionar 12/05/2024 
+
 """
         ####        Monte Carlo Localization        ####
         ####        Sistemas Autónomos              ####
@@ -75,7 +76,7 @@ class MonteCarloLocalization(object):
         self.resolution = 0  # Resolução do mapa
         self.origin = []  # Origem do mapa
         self.t1 = 0
-        self.sigma = 60
+        self.sigma = 70
         self.matrix_pixeis=self.matrix()# contém uma matriz com  valor máximo que um pixel pode ter. Em um arquivo PGM, os valores dos pixels variam de 0 a esse valor máximo
         #o numero de linhas e colunas da matriz = a largura e altura maxima do mapa 
         self.mapa = np.where(self.matrix_pixeis == 205, 0, self.matrix_pixeis) #poe a zero a posição que não faz parte do mapa-cinzento
@@ -257,7 +258,9 @@ class MonteCarloLocalization(object):
                 maximo = max(0, 1.0 - self.weight_fast/self.weight_slow) # Apenas para kidnapping
                 for i in b:                 # Apenas para kidnapping
                     if(i < maximo):         # Apenas para kidnapping
-                        novas_particulas+=1 # Apenas para kidnapping
+                        # novas_particulas+=1 # Apenas para kidnapping
+                        i = 1
+                novas_particulas = 0
                 self.particles = self.resample(novas_particulas)
 
     def publish_weight(self):
@@ -402,20 +405,20 @@ class MonteCarloLocalization(object):
         return x_pixels, y_pixels
 
     def matrix(self):
-        matriz_pixels = self.ler_arquivo_pgm("/home/neelam/Desktop/Projeto_MCL/maps/lab.pgm", byteorder='<')
-        self.ler_arquivo_yaml("/home/neelam/Desktop/Projeto_MCL/maps/lab.yaml")
+        matriz_pixels = self.ler_arquivo_pgm("/home/morais/Downloads/corredor_mais_sala.pgm", byteorder='<')
+        self.ler_arquivo_yaml("/home/morais/Downloads/corredor_mais_sala.yaml")
         return matriz_pixels
 
 
     def continua (self):
-        rate = rospy.Rate(10)
+        rate = rospy.Rate(15)
         while not rospy.is_shutdown():
             self.forever_running_scan()
             self.publish()
             rate.sleep()
 
 if __name__ == "__main__":
-    num_particles = 800
+    num_particles = 1500
     mcl = MonteCarloLocalization(num_particles)
     #mcl.matrix()
     mcl.continua()
