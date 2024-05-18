@@ -6,6 +6,7 @@
 
   - [**Prerequisites**](#prerequisites)
   - [**Install**](#install)
+  - [**Source Code**](#source-code)
   - [**Datasets**](#datasets)
   - [**Important Tools**](#important-tools)
     - [**Setting up the Gazebo Environment**](#setting-up-the-gazebo-environment)
@@ -25,6 +26,21 @@ $ git clone https://github.com/Moraisgit/turtlebot_mcl_localization.git
 $ cd ..
 $ catkin_make
 ```
+
+## Source Code
+The functionalities of each script are below described.
+- `busca_V5.0.py` - Implements the algorithm for real data (and for Gazebo)
+
+- `graphs1_V5.0.py` - Implements a graph (to be ran with `busca_V5.0.py`) for the robot's position and the particles
+
+- `graphs2_V5.0.py` - Implements a graph (to be ran with `busca_V5.0.py`) showing the robot's path estimated by our code (weighted average with 1% of the heaviest particles) along with the path followed by AMCL. It also displays the RMSE in another graph
+
+- `Microsimulador_MCL_V5.0.py` - Implements the algorithm for synthetic data
+
+- `MSgraphs1_V5.0.py` - Implements a graph (to be run with `Microsimulador_MCL_V5.0.py`) for the robot's position and the particles
+
+- `MSgraphs2_V5.0.py` - Implements a graph (to be run with `Microsimulador_MCL_V5.0.py`) showing the robot's path estimated by our code (weighted average with 1% of the heaviest particles) along with the actual path taken by the robot (known <i>a priori</i>, not using [AMCL](https://wiki.ros.org/amcl)). It also displays the RMSE in another graph
+
 ## Datasets
 Several datasets were recorded and are available [here](https://drive.google.com/drive/folders/13gN8WpE1l5GEju-yHzZDzt4QcmkR-ijJ?usp=sharing).
 
@@ -129,7 +145,7 @@ $ rosrun gmapping slam_gmapping scan:=/scan
 
 To visualize the map on Rviz, click on "Add"->"By topic"->"Map"->"OK" and then "Global Options"->"Fixed Frame"->"map". An image follows in order to help the change process.
 
-![rviz_change](https://github.com/Moraisgit/turtlebot_mcl_localization/assets/114250545/e212436c-4587-484b-80f7-955afc0c7e7d)
+![rviz_change](./assets/rviz_change.png)
 
 Then save the Rviz configuration with "File"->"Save Config As" and overwrite the file `turtlebot3_gazebo_model.rviz`.
 
@@ -161,4 +177,4 @@ $ rosbag play <rosbag_file_name>.bag -r 0.05
 
 After ensuring a good initial pose estimate one can increase the velocity at which your bag file is played. See the attached video for visual help on how to do it.
 
-![AMCL](https://github.com/Moraisgit/turtlebot_mcl/assets/114250545/613b835f-f0d5-4a82-860e-5ae17fd24c5e)
+![amcl](./assets/amcl.gif)
