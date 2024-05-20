@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Versão a funcionar 18/05/2024 
+# Versão a funcionar 20/05/2024 
 
 """
-        ####          Monte Carlo Localization                                 ####
-        ####  Graph Node 1 Microsimulator   (Particles and Robot Position)     ####
-        ####          Sistemas Autónomos                                       ####
-        ####          2ºSemestre 2023/2024 (P4)                                ####
-        ####          L02    G02                                               ####
+        ####          Monte Carlo Localization            ####
+        ####  Graph Node 1 (Particles and Robot Position) ####
+        ####          Sistemas Autónomos                  ####
+        ####          2ºSemestre 2023/2024 (P4)           ####
+        ####          L02    G02                          ####
 
 Autores:    António Vasco Morais de Carvalho,  (ist1102643-LEEC)
             Catarina Andreia Duarte Caramalho, (ist1102644-LEEC)
@@ -19,7 +19,6 @@ Autores:    António Vasco Morais de Carvalho,  (ist1102643-LEEC)
 from visualization_msgs.msg import MarkerArray
 import matplotlib.pyplot as plt
 from geometry_msgs.msg import PoseWithCovarianceStamped
-from nav_msgs.msg import Odometry
 import pandas as pd
 import time
 import rospy
@@ -28,14 +27,12 @@ import pandas as pd
 import re
 import numpy
 import numpy as np
-import sys
 
 
 amcl_values = []
 time_values= []
 amcl_time_values= []
 allParticles_values = []
-particles_values = []
 resolution = 0
 origin = [0, 0, 0]
 width = 0
@@ -47,7 +44,6 @@ scatter_amcl = None
 scatter_particles = None
 
 
-
 def conversao_pixeis(x, y):
     a = ((x - origin[0]) / resolution).astype(int)
     x = np.where((a >= width) | (a < 0), 0, a)
@@ -55,17 +51,13 @@ def conversao_pixeis(x, y):
     y = np.where((b >= height) | (b < 0), 0, b)
     return x, y
 
-
-def particles_callback(msg):
-    positions = [particle.pose.position for particle in msg.markers]
-    particles_values.extend(positions)
-    tempo = [particle.header.stamp.secs + particle.header.stamp.nsecs * (10 ** -9) for particle in msg.markers]
-    time_values.extend(tempo)
-
-def clear_scatter():
-    plt.pause(0.2)
-    plt.cla()
-
+def amcl_callback(msg):
+    global amcl_values, amcl_time_values
+    amcl_values = []
+    position = msg.pose.pose.position
+    amcl_values.append(position)
+    tempo = [msg.header.stamp.secs + msg.header.stamp.nsecs * (10 ** -9)]
+    amcl_time_values.extend(tempo)
 
 def allParticles_callback(msg):
     global allParticles_values
@@ -75,29 +67,32 @@ def allParticles_callback(msg):
     tempo = [particle.header.stamp.secs + particle.header.stamp.nsecs * (10 ** -9)for particle in msg.markers]
     time_values.extend(tempo)
 
+def clear_scatter():
+    plt.pause(0.2)
+    plt.cla()
 
 
 def allParticles_position():
     global resolution, origin, width, height, map, scatter_amcl, scatter_particles
     
-    # Plot the robot positions
-    robot_x = [position.x for position in particles_values]
-    robot_y = [position.y for position in particles_values]
-    robot_x_pixels, robot_y_pixels = conversao_pixeis(robot_x, robot_y) 
+    # Plot the AMCL positions
+    amcl_x = [position.x for position in amcl_values]
+    amcl_y = [position.y for position in amcl_values]
+    amcl_x_pixels, amcl_y_pixels = conversao_pixeis(amcl_x, amcl_y) 
     
     # Plot the particle positions
     particles_x = [position.x for position in allParticles_values]
     particles_y = [position.y for position in allParticles_values]
     particles_x_pixels, particles_y_pixels = conversao_pixeis(particles_x, particles_y)
     
-    plt.scatter(particles_x_pixels, particles_y_pixels, color='red', label='Particles positions',s=6,alpha=0.6)
-    plt.scatter(robot_x_pixels, robot_y_pixels, color='blue', label='Robot position',s=20)
+    plt.scatter(particles_x_pixels, particles_y_pixels, color='green', label='Particles positions',s=6,alpha=0.6)
+    plt.scatter(amcl_x_pixels, amcl_y_pixels, color='blue', label='Robot position (/amcl_pose)',s=20)
     plt.legend()
     plt.xlabel('x (pixels)')
     plt.ylabel('y (pixels)')
-    
 
     plt.draw()
+
 
 def read_pgm(filename, byteorder='>'):
     global width, height
@@ -123,11 +118,11 @@ def plot_map():
 
 
 def initialization():
-    global resolution, origin, width, height, map, fig, ax, scatter_amcl, scatter_particles
+    global resolution, origin, width, height, map, fig, ax, scatter_amcl, scatter_particles,scatter_dead_reckoning
 
-    map, width, height = read_pgm("/home/miguel/Desktop/MonteCarloLocalization-main/maps/mapa_2.pgm", byteorder='<')
+    map, width, height = read_pgm(rospy.get_param("~map_path_pgm", default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/simulation/gmapping_02.pgm"), byteorder='<')
 
-    with open("/home/miguel/Desktop/MonteCarloLocalization-main/maps/mapa_2.yaml", 'r') as file:
+    with open(rospy.get_param("~map_path_yaml", default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/simulation/gmapping_02.yaml"), 'r') as file:
         # Load the YAML contents
         yaml_data = yaml.safe_load(file)
 
@@ -143,27 +138,25 @@ def initialization():
     
     fig, ax = plt.subplots(figsize=(10, 6))
     scatter_amcl = ax.scatter([], [], color='blue', s=5)
-    scatter_particles = ax.scatter([], [], color='red', s=5)
-    
+    scatter_particles = ax.scatter([], [], color='green', s=5)
+   
 
 def main():
     plt.ion()
-    rospy.init_node('MS_Graphs_1', anonymous=True)
-    rospy.Subscriber("/robotpose", MarkerArray, particles_callback)
-    rospy.Subscriber("/particles", MarkerArray, allParticles_callback)
+    rospy.init_node('Node_Graphs1', anonymous=True)
 
+    rospy.Subscriber("/amcl_pose", PoseWithCovarianceStamped, amcl_callback)
+    rospy.Subscriber("/particles", MarkerArray, allParticles_callback)
     initialization()
     
 
-    rate = rospy.Rate(1)  #Não alterar
+    rate = rospy.Rate(1)  
     
     while not rospy.is_shutdown():
         allParticles_position()
         plot_map()
         clear_scatter()
         rate.sleep()
-
-
 
 
 if __name__ == '__main__':

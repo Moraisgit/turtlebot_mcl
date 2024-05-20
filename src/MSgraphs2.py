@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Versão a funcionar 18/05/2024 
+# Versão a funcionar 20/05/2024 
 
 """
         ####          Monte Carlo Localization                            ####
@@ -139,9 +139,9 @@ def read_pgm(filename, byteorder='>'):
 def initialization():
     global x_vals, y_vals, line, resolution, origin, width, height, map, fig, ax, scatter_amcl, scatter_particles, start_time, aux2
 
-    map, width, height = read_pgm("/home/miguel/Desktop/MonteCarloLocalization-main/maps/mapa_2.pgm", byteorder='<')
+    map, width, height = read_pgm(rospy.get_param("~map_path_pgm", default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/mapa_2.pgm"), byteorder='<')
 
-    with open("/home/miguel/Desktop/MonteCarloLocalization-main/maps/mapa_2.yaml", 'r') as file:
+    with open(rospy.get_param("~map_path_yaml", default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/mapa_2.yaml"), 'r') as file:
         # Load the YAML contents
         yaml_data = yaml.safe_load(file)
 
@@ -157,7 +157,7 @@ def initialization():
 
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.imshow(map, cmap='gray', origin='lower')
-    scatter_amcl = ax.scatter([], [], color='red', s=5, label='Robot trajectory AMCL')
+    scatter_amcl = ax.scatter([], [], color='red', s=5, label='Robot trajectory (/robotpose)')
     scatter_particles = ax.scatter([], [], color='blue', s=5, label='Position Estimate')
     ax.legend()
     plt.xlabel('x (pixels)')

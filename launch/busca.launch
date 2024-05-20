@@ -1,0 +1,25 @@
+<launch>
+    <!-- Define map paths -->
+    <arg name="map_pgm" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/simulation/house_gazebo.pgm" />
+    <arg name="map_yaml" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/simulation/house_gazebo.yaml" />
+    <arg name="particles" default="1000" />
+
+    <!-- Run busca.py with specified num_particles parameter -->
+    <node name="busca_node" pkg="turtlebot_mcl" type="busca.py" output="screen">
+        <param name="map_path_pgm" value="$(arg map_pgm)" />
+        <param name="map_path_yaml" value="$(arg map_yaml)" />
+        <param name="num_particles" value="$(arg particles)" />
+    </node>
+
+    <!-- Run graphs1.py -->
+    <node name="graphs1_node" pkg="turtlebot_mcl" type="graphs1.py" output="screen">
+        <param name="map_path_pgm" value="$(arg map_pgm)" />
+        <param name="map_path_yaml" value="$(arg map_yaml)" />
+    </node>
+
+    <!-- Run graphs2.py -->
+    <node name="graphs2_node" pkg="turtlebot_mcl" type="graphs2.py" output="screen">
+        <param name="map_path_pgm" value="$(arg map_pgm)" />
+        <param name="map_path_yaml" value="$(arg map_yaml)" />
+    </node>
+</launch>

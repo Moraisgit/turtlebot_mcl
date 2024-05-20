@@ -1,0 +1,25 @@
+<launch>
+    <!-- Define map paths -->
+    <arg name="map_pgm" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/mapa_2.pgm" />
+    <arg name="map_yaml" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/mapa_2.yaml" />
+    <arg name="particles" default="1000" />
+
+    <!-- Run Microsimulador_MCL.py with specified num_particles parameter -->
+    <node name="Microsimulador_MCL_node" pkg="turtlebot_mcl" type="Microsimulador_MCL.py" output="screen">
+        <param name="map_path_pgm" value="$(arg map_pgm)" />
+        <param name="map_path_yaml" value="$(arg map_yaml)" />
+        <param name="num_particles" value="$(arg particles)" />
+    </node>
+
+    <!-- Run MSgraphs1.py -->
+    <node name="MSgraphs1_node" pkg="turtlebot_mcl" type="MSgraphs1.py" output="screen">
+        <param name="map_path_pgm" value="$(arg map_pgm)" />
+        <param name="map_path_yaml" value="$(arg map_yaml)" />
+    </node>
+
+    <!-- Run MSgraphs2.py -->
+    <node name="MSgraphs2_node" pkg="turtlebot_mcl" type="MSgraphs2.py" output="screen">
+        <param name="map_path_pgm" value="$(arg map_pgm)" />
+        <param name="map_path_yaml" value="$(arg map_yaml)" />
+    </node>
+</launch>

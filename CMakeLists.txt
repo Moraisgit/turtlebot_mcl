@@ -8,8 +8,7 @@ project(turtlebot_mcl)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-    rospy
-    std_msgs
+  rospy
 )
 
 ## System dependencies are found with CMake's conventions
@@ -19,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -103,7 +102,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES turtlebot_mcl_localization
+#  LIBRARIES turtlebot_mcl
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -116,12 +115,12 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-${catkin_INCLUDE_DIRS}
+# ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/turtlebot_mcl_localization.cpp
+#   src/${PROJECT_NAME}/turtlebot_mcl.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -132,7 +131,7 @@ ${catkin_INCLUDE_DIRS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/turtlebot_mcl_localization_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/turtlebot_mcl_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -196,7 +195,7 @@ ${catkin_INCLUDE_DIRS}
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_turtlebot_mcl_localization.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_turtlebot_mcl.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

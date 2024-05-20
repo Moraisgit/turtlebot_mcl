@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Versão a funcionar 18/05/2024 
+# Versão a funcionar 20/05/2024 
 
 """
         ####   Monte Carlo Localization Microsimulator   ####
@@ -68,7 +68,7 @@ class Particle(object):
 
 class MonteCarloLocalization(object):
     
-    def __init__(self, num_particles):
+    def __init__(self):
         rospy.init_node('MCL_algoritmo', anonymous=True)
 
         self.robot_x = 0
@@ -83,7 +83,7 @@ class MonteCarloLocalization(object):
         self.MkArray = MarkerArray()
         self.MkArraymax = MarkerArray()
         self.MkArrayrobot = MarkerArray()
-        self.num_particles=num_particles
+        self.num_particles = rospy.get_param("~num_particles", default=1000)
         self.width = 0
         self.height = 0
         self.resolution = 0  # Resolução do mapa
@@ -458,14 +458,14 @@ class MonteCarloLocalization(object):
         return x_pixels, y_pixels
 
     def matrix(self):
-        matriz_pixels = self.ler_arquivo_pgm("//home/miguel/Desktop/Neelam/mapa_2.pgm", byteorder='<')
+        matriz_pixels = self.ler_arquivo_pgm(rospy.get_param("~map_path_pgm", default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/mapa_2.pgm"), byteorder='<')
         #pyplot.imshow(matriz_pixels, pyplot.cm.gray)
         #pyplot.show()
-        self.ler_arquivo_yaml("/home/miguel/Desktop/Neelam/mapa_2.yaml")
+        self.ler_arquivo_yaml(rospy.get_param("~map_path_yaml", default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/mapa_2.yaml"))
         return matriz_pixels
     
     def continua (self):
-        self.publish_robot()
+        #self.publish_robot()
         self.publish()
         time.sleep(2)
 
@@ -553,7 +553,6 @@ class MonteCarloLocalization(object):
         print("FIM")
 
 if __name__ == "__main__":
-    num_particles = 1000
-    mcl = MonteCarloLocalization(num_particles)
+    mcl = MonteCarloLocalization()
     #mcl.matrix()
     mcl.continua()

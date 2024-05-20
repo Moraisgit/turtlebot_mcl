@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Versão a funcionar 18/05/2024 
+# Versão a funcionar 20/05/2024 
 
 """
         ####    Monte Carlo Localization Node       ####
@@ -66,11 +66,11 @@ class Particle(object):
 
 class MonteCarloLocalization(object):
     
-    def __init__(self, num_particles):
+    def __init__(self):
         rospy.init_node('MCL_algoritmo', anonymous=True)
         self.MkArray = MarkerArray()
         self.MkArrayweight = MarkerArray()
-        self.num_particles=num_particles
+        self.num_particles = rospy.get_param("~num_particles", default=1000)
         self.width = 0
         self.height = 0
         self.resolution = 0  # Resolução do mapa
@@ -407,8 +407,8 @@ class MonteCarloLocalization(object):
         return x_pixels, y_pixels
 
     def matrix(self):
-        matriz_pixels = self.ler_arquivo_pgm("/media/sf_VM_Sauto/Dados_Novos/maps/simulation/house_gazebo.pgm", byteorder='<')
-        self.ler_arquivo_yaml("/media/sf_VM_Sauto/Dados_Novos/maps/simulation/house_gazebo.yaml")
+        matriz_pixels = self.ler_arquivo_pgm(rospy.get_param("~map_path_pgm", default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/simulation/gmapping_02.pgm"), byteorder='<')
+        self.ler_arquivo_yaml(rospy.get_param("~map_path_yaml", default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/simulation/gmapping_02.yaml"))
         return matriz_pixels
 
 
@@ -420,7 +420,6 @@ class MonteCarloLocalization(object):
             rate.sleep()
 
 if __name__ == "__main__":
-    num_particles = 1000
-    mcl = MonteCarloLocalization(num_particles)
+    mcl = MonteCarloLocalization()
     #mcl.matrix()
     mcl.continua()

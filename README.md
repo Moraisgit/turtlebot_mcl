@@ -7,6 +7,7 @@
   - [**Prerequisites**](#prerequisites)
   - [**Install**](#install)
   - [**Source Code**](#source-code)
+  - [**Launch Files**](#launch-files)
   - [**Datasets**](#datasets)
   - [**Important Tools**](#important-tools)
     - [**Setting up the Gazebo Environment**](#setting-up-the-gazebo-environment)
@@ -29,17 +30,23 @@ $ catkin_make
 
 ## Source Code
 The functionalities of each script are below described.
-- `busca_V5.0.py` - Implements the algorithm for real data (and for Gazebo)
+- `busca.py` - Implements the algorithm for real data (and for Gazebo data).
 
-- `graphs1_V5.0.py` - Implements a graph (to be ran with `busca_V5.0.py`) for the robot's position and the particles
+- `graphs1.py` - Implements a graph (to be ran with `busca.py`) for the robot's position and the particles.
 
-- `graphs2_V5.0.py` - Implements a graph (to be ran with `busca_V5.0.py`) showing the robot's path estimated by our code (weighted average with 1% of the heaviest particles) along with the path followed by AMCL. It also displays the RMSE in another graph
+- `graphs2.py` - Implements a graph (to be ran with `busca.py`) showing the robot's path estimated by our code (weighted average with 1% of the heaviest particles) along with the path followed by [AMCL](https://wiki.ros.org/amcl). It also displays the RMSE in another graph.
 
-- `Microsimulador_MCL_V5.0.py` - Implements the algorithm for synthetic data
+- `Microsimulador_MCL.py` - Implements the algorithm for synthetic data.
 
-- `MSgraphs1_V5.0.py` - Implements a graph (to be run with `Microsimulador_MCL_V5.0.py`) for the robot's position and the particles
+- `MSgraphs1.py` - Implements a graph (to be ran with `Microsimulador_MCL.py`) for the robot's position and the particles.
 
-- `MSgraphs2_V5.0.py` - Implements a graph (to be run with `Microsimulador_MCL_V5.0.py`) showing the robot's path estimated by our code (weighted average with 1% of the heaviest particles) along with the actual path taken by the robot (known <i>a priori</i>, not using [AMCL](https://wiki.ros.org/amcl)). It also displays the RMSE in another graph
+- `MSgraphs2.py` - Implements a graph (to be ran with `Microsimulador_MCL.py`) showing the robot's path estimated by our code (weighted average with 1% of the heaviest particles) along with the actual path taken by the robot (known <i>a priori</i>, not using [AMCL](https://wiki.ros.org/amcl)). It also displays the RMSE in another graph.
+
+## Launch Files
+There are two lauch files that can be used.
+- `busca.launch` - Launches the scripts `busca.py`, `graphs1.py` and `graphs2.py` to ease the process of visualizing real data and Gazebo data (in order for the graphs regarding [AMCL](https://wiki.ros.org/amcl) data, launch the method itself).
+
+- `micro_simulator.launch` - Launches the scripts `Microsimulador_MCL.py`, `MSgraphs1.py` and `MSgraphs2.py` to ease the process of visualizing microsimulator data.
 
 ## Datasets
 Several datasets were recorded and are available [here](https://drive.google.com/drive/folders/13gN8WpE1l5GEju-yHzZDzt4QcmkR-ijJ?usp=sharing).
