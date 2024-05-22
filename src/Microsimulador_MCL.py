@@ -83,13 +83,15 @@ class MonteCarloLocalization(object):
         self.MkArray = MarkerArray()
         self.MkArraymax = MarkerArray()
         self.MkArrayrobot = MarkerArray()
+        # Number of particles from launch file
         self.num_particles = rospy.get_param("~num_particles", default=1000)
         self.width = 0
         self.height = 0
         self.resolution = 0  # Resolução do mapa
         self.origin = []  # Origem do mapa
         self.t1 = 0
-        self.sigma = 40
+        # Sigma value from launch file
+        self.sigma = rospy.get_param("~sigma", default = 40)
         self.denominador = np.sqrt(2*np.pi*(self.sigma**90)) #Fixo, logo metendo aqui assim acelera as contas
         self.matrix_pixeis=self.matrix()# contém uma matriz com  valor máximo que um pixel pode ter. Em um arquivo PGM, os valores dos pixels variam de 0 a esse valor máximo
         #o numero de linhas e colunas da matriz = a largura e altura maxima do mapa 
@@ -263,8 +265,9 @@ class MonteCarloLocalization(object):
                     particle.weight = particle.weight / all_weight
             self.wallcolission = 0 # Apenas para kidnapping
             novas_particulas = 0   # Apenas para kidnapping
-            self.weight_fast += 0.8* (self.weight_average - self.weight_fast) # Apenas para kidnapping era 0.8
-            self.weight_slow += 0.2* (self.weight_average - self.weight_slow) # Apenas para kidnapping
+             # Get weight_fast and weight_slow from launchfile
+            self.weight_fast += rospy.get_param("~weight_fast", default=0.8) * (self.weight_average - self.weight_fast) # Apenas para kidnapping era 0.8
+            self.weight_slow += rospy.get_param("~weight_slow", default=0.2) * (self.weight_average - self.weight_slow) # Apenas para kidnapping
             #print(self.weight_fast)
             #print(self.weight_slow)
             n_eff = 1 / sum([particle.weight**2 for particle in self.particles])
