@@ -265,9 +265,9 @@ class MonteCarloLocalization(object):
                     particle.weight = particle.weight / all_weight
             self.wallcolission = 0 # Apenas para kidnapping
             novas_particulas = 0   # Apenas para kidnapping
-             # Get weight_fast and weight_slow from launchfile
-            self.weight_fast += rospy.get_param("~weight_fast", default=0.8) * (self.weight_average - self.weight_fast) # Apenas para kidnapping era 0.8
-            self.weight_slow += rospy.get_param("~weight_slow", default=0.2) * (self.weight_average - self.weight_slow) # Apenas para kidnapping
+             # Get alpha_fast and alpha_slow from launchfile
+            self.weight_fast += rospy.get_param("~alpha_fast", default=0.8) * (self.weight_average - self.weight_fast) # Apenas para kidnapping era 0.8
+            self.weight_slow += rospy.get_param("~alpha_slow", default=0.2) * (self.weight_average - self.weight_slow) # Apenas para kidnapping
             #print(self.weight_fast)
             #print(self.weight_slow)
             n_eff = 1 / sum([particle.weight**2 for particle in self.particles])
