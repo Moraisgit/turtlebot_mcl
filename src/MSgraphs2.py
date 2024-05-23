@@ -35,6 +35,7 @@ import sys
 import matplotlib.animation as animation
 from itertools import count
 import random
+import csv
 
 amcl_angles = []
 aux2 = 0
@@ -53,6 +54,8 @@ fig = None
 ax = None
 scatter_amcl = None
 scatter_particles = None
+x_vals = []
+y_vals = []
 
 def conversao_pixeis(x, y):
     a = ((x - origin[0]) / resolution).astype(int)
@@ -67,7 +70,6 @@ def amcl_callback(msg):
     tempo = [particle.header.stamp.secs + particle.header.stamp.nsecs * (10 ** -9) for particle in msg.markers]
     time_values.extend(tempo)
 
-
 def particles_callback(msg):
     positions = [particle.pose.position for particle in msg.markers]
     angle = [particle.pose.orientation for particle in msg.markers]
@@ -79,12 +81,10 @@ def particles_callback(msg):
 def get_position():
     global resolution, origin, width, height, map, scatter_amcl, scatter_particles, aux2, teste
 
-   
     amcl_x = [position.x for position in amcl_values]
     amcl_y = [position.y for position in amcl_values]
     amcl_x_pixels, amcl_y_pixels = conversao_pixeis(amcl_x, amcl_y) 
 
-    
     particles_x = [position.x for position in particles_values]
     particles_y = [position.y for position in particles_values]
     particles_x_pixels, particles_y_pixels = conversao_pixeis(particles_x, particles_y)
@@ -96,7 +96,6 @@ def get_position():
     #####RMSE####
     
     if ( len(amcl_y) and len(amcl_x) and len(particles_x) and len(particles_y) ) >0:
-
         current_time = time.time() - start_time - aux2
         x_vals.append(current_time)
         aux1= math.sqrt((amcl_x[-1]-particles_x[-1])**2+(amcl_y[-1]-particles_y[-1])**2) #cálculo do RMSE 
@@ -104,19 +103,17 @@ def get_position():
             for i in range(len(y_vals)):
                 y_vals[i] = aux1
             teste = 0
-
     else:
-         aux1= -1
-         teste= -20
-         x_vals.append(0)
-         aux2 += 1
+        aux1= -1
+        teste= -20
+        x_vals.append(0)
+        aux2 += 1
 
     y_vals.append(aux1)  
     line.set_data(x_vals, y_vals)
     ax.relim()
     ax.autoscale_view()
     plt.draw()
-
 
 def read_pgm(filename, byteorder='>'):
     global width, height
@@ -188,9 +185,11 @@ def main():
     rate = rospy.Rate(1)  #Não alterar, está feito para 1 segundo
     while not rospy.is_shutdown():
         get_position()
+        with open('/home/morais/turtle_ws/src/turtlebot_mcl/csv/micro_simulator/rmse_data.csv', 'w', newline='') as file:  # Change the path as needed
+            writer = csv.writer(file)
+            writer.writerow(['Time (seconds)', 'RMSE (meters)'])
+            writer.writerows(zip(x_vals, y_vals))
         rate.sleep()
-
 
 if __name__ == '__main__':
     main()
-    
