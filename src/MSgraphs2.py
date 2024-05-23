@@ -185,7 +185,7 @@ def main():
     rate = rospy.Rate(1)  #Não alterar, está feito para 1 segundo
     while not rospy.is_shutdown():
         get_position()
-        with open('/home/morais/turtle_ws/src/turtlebot_mcl/csv/micro_simulator/rmse_data.csv', 'w', newline='') as file:  # Change the path as needed
+        with open(rospy.get_param("~csv_path", default="/home/morais/turtle_ws/src/turtlebot_mcl/csv/micro_simulator/rmse_data.csv"), 'w', newline='') as file:  # Change the path as needed
             writer = csv.writer(file)
             writer.writerow(['Time (seconds)', 'RMSE (meters)'])
             writer.writerows(zip(x_vals, y_vals))
