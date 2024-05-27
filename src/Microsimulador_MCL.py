@@ -521,38 +521,34 @@ class MonteCarloLocalization(object):
                 break
         
         
-        #Simulate kidnapping
-        self.robot_x = 1.8
-        self.robot_y = 4
-        self.robot_teta = -1.2
+        # #Simulate kidnapping
+        # self.robot_x = 1.8
+        # self.robot_y = 4
+        # self.robot_teta = -1.2
         
-        while not rospy.is_shutdown():
+        # while not rospy.is_shutdown():
 
-            self.robot_teta =  self.robot_teta + (angular_velocity_1[aux_2]) * delta_t
-            self.robot_x = self.robot_x + (linear_velocity_1) * np.cos(self.robot_teta) * delta_t
-            self.robot_y = self.robot_y + (linear_velocity_1) * np.sin(self.robot_teta) * delta_t
-            #print("Robot anda:",self.robot_x, self.robot_y, self.robot_teta,angular_velocity_1[aux_2])
-            self.publish_robot()
+        #     self.robot_teta =  self.robot_teta + (angular_velocity_1[aux_2]) * delta_t
+        #     self.robot_x = self.robot_x + (linear_velocity_1) * np.cos(self.robot_teta) * delta_t
+        #     self.robot_y = self.robot_y + (linear_velocity_1) * np.sin(self.robot_teta) * delta_t
+        #     #print("Robot anda:",self.robot_x, self.robot_y, self.robot_teta,angular_velocity_1[aux_2])
+        #     self.publish_robot()
 
-            #print("Odometria")
-            for particle in self.particles:
-                self.predict_odometry (particle,angular_velocity_1[aux_2],linear_velocity_1,delta_t)
+        #     #print("Odometria")
+        #     for particle in self.particles:
+        #         self.predict_odometry (particle,angular_velocity_1[aux_2],linear_velocity_1,delta_t)
 
-            #print("Laser Scan")
-            self.forever_running_scan()
+        #     #print("Laser Scan")
+        #     self.forever_running_scan()
 
-            self.publish()
-            aux_2 += 1
-            time.sleep(0.2)
+        #     self.publish()
+        #     aux_2 += 1
+        #     time.sleep(0.2)
 
-            if aux_2 == len(angular_velocity_1) - 1:
-                aux_2 = 0
-                break
+        #     if aux_2 == len(angular_velocity_1) - 1:
+        #         aux_2 = 0
+        #         break
         
-
-
-
-
         print("FIM")
 
 if __name__ == "__main__":

@@ -215,7 +215,7 @@ class MonteCarloLocalization(object):
         predicted_ranges = np.array(predicted_ranges)
        
         ranges_clipped = np.around(ranges_clipped, 2)
-        diff = ranges_clipped -  predicted_ranges 
+        diff = ranges_clipped - predicted_ranges 
         diff = np.array(diff)
         
         diff_transpose = diff[:, np.newaxis] 

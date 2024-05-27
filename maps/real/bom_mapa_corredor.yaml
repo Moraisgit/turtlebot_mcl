@@ -1,4 +1,4 @@
-image: corredor_bom.pgm
+image: bom_mapa_corredor.pgm
 resolution: 0.050000
 origin: [-4.000000, -4.000000, 0.000000]
 negate: 0
