@@ -1,8 +1,8 @@
 <launch>
     <!-- Define map paths -->
-    <arg name="map_pgm" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/simulation/house_gazebo.pgm" />
-    <arg name="map_yaml" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/simulation/house_gazebo.yaml" />
-    <arg name="csv" default="/home/morais/turtle_ws/src/turtlebot_mcl/csv/micro_simulator/rmse_data.csv" />
+    <arg name="map_pgm" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/bom_mapa_corredor.pgm" />
+    <arg name="map_yaml" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/bom_mapa_corredor.yaml" />
+    <arg name="csv" default="/home/morais/turtle_ws/src/turtlebot_mcl/csv/busca/rmse_data.csv" />
 
     <!-- Run busca.py with specified num_particles parameter -->
     <node name="busca_node" pkg="turtlebot_mcl" type="busca.py" output="screen">
@@ -10,8 +10,8 @@
         <param name="map_path_yaml" value="$(arg map_yaml)" />
         <param name="num_particles" value="1000" />
         <param name="sigma" value="40" />
-        <param name="alpha_fast" value="0.05" />
-        <param name="alpha_slow" value="0.001" />
+        <param name="alpha_fast" value="0.8" />
+        <param name="alpha_slow" value="0.2" />
     </node>
 
     <!-- Run graphs1.py -->
