@@ -37,6 +37,9 @@ def correct_timestamps(data, max_timestamp):
 def main():
     # Define the source and target directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    #######################################################
+    #           CHANGE FOR BUSCA OR MICROSIMULATOR
+    #######################################################
     # source_dir = os.path.join(script_dir, '../csv/busca')
     # target_dir = os.path.join(script_dir, '../csv/busca/corrected_time')
     source_dir = os.path.join(script_dir, '../csv/micro_simulator')
@@ -45,7 +48,9 @@ def main():
     # Ensure the target directory exists
     os.makedirs(target_dir, exist_ok=True)
 
-    # Define the maximum timestamp to keep
+    #######################################################
+    #          TIME FROM WHICH WE CUT THE CSV
+    #######################################################
     max_timestamp = 143
 
     # Process each CSV file in the source directory

@@ -2,7 +2,7 @@
     <!-- Define map paths -->
     <arg name="map_pgm" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/mapa_2.pgm" />
     <arg name="map_yaml" default="/home/morais/turtle_ws/src/turtlebot_mcl/maps/real/mapa_2.yaml" />
-    <arg name="csv" default="/home/morais/turtle_ws/src/turtlebot_mcl/csv/micro_simulator/rmse_data2.csv" />
+    <arg name="csv" default="/home/morais/turtle_ws/src/turtlebot_mcl/csv/micro_simulator/rmse_data9.csv" />
 
     <!-- Run Microsimulador_MCL.py with specified num_particles parameter -->
     <node name="Microsimulador_MCL_node" pkg="turtlebot_mcl" type="Microsimulador_MCL.py" output="screen">
