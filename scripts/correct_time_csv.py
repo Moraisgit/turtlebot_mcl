@@ -51,7 +51,7 @@ def main():
     #######################################################
     #          TIME FROM WHICH WE CUT THE CSV
     #######################################################
-    max_timestamp = 143
+    max_timestamp = 254
 
     # Process each CSV file in the source directory
     for filename in os.listdir(source_dir):

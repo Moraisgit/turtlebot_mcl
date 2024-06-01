@@ -91,6 +91,10 @@ def calculate_SD_SEM_rmse(only_this_timestamp_rmse_dict, mean_rmse_data):
     SD_rmse_data = []
     SEM_rmse_data = []
     sum_squared_diff = 0
+    max_SD = 0
+    max_SEM = 0
+    aux1 = 0
+    aux2 = 0
     #######################
     #   NUMBER OF SAMPLES
     #######################
@@ -118,10 +122,19 @@ def calculate_SD_SEM_rmse(only_this_timestamp_rmse_dict, mean_rmse_data):
         standard_deviation = math.sqrt(aux)
         standard_error_mean = standard_deviation / math.sqrt(N)
 
+        # Keep track of the maximum values of SD and SEM
+        aux1 = standard_deviation
+        aux2 = standard_error_mean
+
+        if aux1 > max_SD:
+            max_SD = aux1
+        if aux2 > max_SEM:
+            max_SEM = aux2
+
         SD_rmse_data.append({'Time (seconds)': timestamp, 'Standard Deviation': standard_deviation})
         SEM_rmse_data.append({'Time (seconds)': timestamp, 'Standard Error Mean': standard_error_mean})
 
-    return SD_rmse_data, SEM_rmse_data
+    return SD_rmse_data, SEM_rmse_data, max_SD, max_SEM
 
 # Function to plot the data
 def plot_data(all_data, mean_rmse_data, mean_rmse_SD_data, mean_rmse_SEM_data):
@@ -175,19 +188,20 @@ def main():
     #######################################################
     #           CHANGE FOR BUSCA OR MICROSIMULATOR
     #######################################################
-    # source_dir = os.path.join(script_dir, '../csv/busca/corrected_time')
-    # mean_csv_path = os.path.join(script_dir, '../csv/busca/corrected_time/rmse_mean_data.csv')
-    # SD_csv_path = os.path.join(script_dir, '../csv/busca/corrected_time/rmse_mean_SD_data.csv')
-    # SEM_csv_path = os.path.join(script_dir, '../csv/busca/corrected_time/rmse_mean_SEM_data.csv')
-    source_dir = os.path.join(script_dir, '../csv/micro_simulator/corrected_time')
-    mean_csv_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/rmse_mean_data.csv')
-    SD_csv_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/rmse_mean_SD_data.csv')
-    SEM_csv_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/rmse_mean_SEM_data.csv')
+    source_dir = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120')
+    mean_csv_path = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120/rmse_mean_data.csv')
+    SD_csv_path = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120/rmse_mean_SD_data.csv')
+    SEM_csv_path = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120/rmse_mean_SEM_data.csv')
+    # source_dir = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60')
+    # mean_csv_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60/rmse_mean_data.csv')
+    # SD_csv_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60/rmse_mean_SD_data.csv')
+    # SEM_csv_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60/rmse_mean_SEM_data.csv')
 
     #######################################################
     # CHANGE THE FILE YOU WANT TO PLOT THE SD and SEM WITH
     #######################################################
-    csv_trial_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/rmse_data0.csv')
+    csv_trial_path = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120/rmse_data0.csv')
+    # csv_trial_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60/rmse_data0.csv')
 
     # Process CSV files and collect RMSE values
     all_data, timestamp_rmse_dict = process_csv_files(source_dir)
@@ -198,7 +212,11 @@ def main():
     # Calculate mean RMSE for each timestamp
     mean_rmse_data = calculate_mean_rmse(timestamp_rmse_dict)
 
-    mean_rmse_SD_data, mean_rmse_SEM_data = calculate_SD_SEM_rmse(only_this_timestamp_rmse_dict, mean_rmse_data)
+    mean_rmse_SD_data, mean_rmse_SEM_data, max_SD, max_SEM = calculate_SD_SEM_rmse(only_this_timestamp_rmse_dict, mean_rmse_data)
+
+    # Print maximum values of SD and SEM
+    print("Maximum Standard Deviation (SD): ", max_SD)
+    print("Maximum Standard Mean Error (SEM): ", max_SEM)
 
     # Write the mean RMSE data to the new CSV file
     write_mean_csv(mean_csv_path, mean_rmse_data)

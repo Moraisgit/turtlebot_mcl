@@ -31,8 +31,8 @@ def main():
     #######################################################
     # Read the CSV data - COMMENT THE ONE YOU ARE NOT USING
     #######################################################
-    data = read_csv('../csv/micro_simulator/rmse_data.csv')
-    # data = read_csv('../csv/busca/rmse_data.csv')
+    data = read_csv('../csv/micro_simulator/sigma_120/rmse_data8.csv')
+    # data = read_csv('../csv/busca/sigma_60/rmse_data.csv')
 
     ##########################
     # SPECIFY THE SPLIT TIME #
