@@ -29,10 +29,16 @@ def check_convergence(data, threshold=0.05):
 
 def main():
     #######################################################
+    #   DEFINE THE NUMBER OF SIGMA AND CSV DATA NUMBER
+    #######################################################
+    sigma = 120
+    csv_data_num = 8
+
+    #######################################################
     # Read the CSV data - COMMENT THE ONE YOU ARE NOT USING
     #######################################################
-    data = read_csv('../csv/micro_simulator/sigma_120/rmse_data8.csv')
-    # data = read_csv('../csv/busca/sigma_60/rmse_data.csv')
+    data = read_csv(f'../csv/micro_simulator/sigma_{sigma}/rmse_data{csv_data_num}.csv')
+    # data = read_csv(f'../csv/busca/sigma_{sigma}/rmse_data{csv_data_num}.csv')
 
     ##########################
     # SPECIFY THE SPLIT TIME #

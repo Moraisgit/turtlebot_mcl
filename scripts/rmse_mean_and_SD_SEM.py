@@ -184,24 +184,30 @@ def plot_data(all_data, mean_rmse_data, mean_rmse_SD_data, mean_rmse_SEM_data):
 def main():
     # Define the source directory
     script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    #######################################################
+    #   DEFINE THE NUMBER OF SIGMA AND CSV DATA NUMBER
+    #######################################################
+    sigma = 60
+    csv_data_num = 0
     
     #######################################################
     #           CHANGE FOR BUSCA OR MICROSIMULATOR
     #######################################################
-    source_dir = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120')
-    mean_csv_path = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120/rmse_mean_data.csv')
-    SD_csv_path = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120/rmse_mean_SD_data.csv')
-    SEM_csv_path = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120/rmse_mean_SEM_data.csv')
-    # source_dir = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60')
-    # mean_csv_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60/rmse_mean_data.csv')
-    # SD_csv_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60/rmse_mean_SD_data.csv')
-    # SEM_csv_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60/rmse_mean_SEM_data.csv')
+    # source_dir = os.path.join(script_dir, f'../csv/busca/corrected_time/sigma_{sigma}')
+    # mean_csv_path = os.path.join(script_dir, f'../csv/busca/corrected_time/sigma_{sigma}/rmse_mean_data.csv')
+    # SD_csv_path = os.path.join(script_dir, f'../csv/busca/corrected_time/sigma_{sigma}/rmse_mean_SD_data.csv')
+    # SEM_csv_path = os.path.join(script_dir, f'../csv/busca/corrected_time/sigma_{sigma}/rmse_mean_SEM_data.csv')
+    source_dir = os.path.join(script_dir, f'../csv/micro_simulator/corrected_time/sigma_{sigma}')
+    mean_csv_path = os.path.join(script_dir, f'../csv/micro_simulator/corrected_time/sigma_{sigma}/rmse_mean_data.csv')
+    SD_csv_path = os.path.join(script_dir, f'../csv/micro_simulator/corrected_time/sigma_{sigma}/rmse_mean_SD_data.csv')
+    SEM_csv_path = os.path.join(script_dir, f'../csv/micro_simulator/corrected_time/sigma_{sigma}/rmse_mean_SEM_data.csv')
 
     #######################################################
     # CHANGE THE FILE YOU WANT TO PLOT THE SD and SEM WITH
     #######################################################
-    csv_trial_path = os.path.join(script_dir, '../csv/busca/corrected_time/sigma_120/rmse_data0.csv')
-    # csv_trial_path = os.path.join(script_dir, '../csv/micro_simulator/corrected_time/sigma_60/rmse_data0.csv')
+    # csv_trial_path = os.path.join(script_dir, f'../csv/busca/corrected_time/sigma_{sigma}/rmse_data{csv_data_num}.csv')
+    csv_trial_path = os.path.join(script_dir, f'../csv/micro_simulator/corrected_time/sigma_{sigma}/rmse_data{csv_data_num}.csv')
 
     # Process CSV files and collect RMSE values
     all_data, timestamp_rmse_dict = process_csv_files(source_dir)
