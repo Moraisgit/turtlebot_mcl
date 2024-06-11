@@ -93,6 +93,8 @@ def calculate_SD_SEM_rmse(timestamp_rmse_dict, mean_rmse_data):
     sum_squared_diff = 0
     max_SD = 0
     max_SEM = 0
+    max_time_SD = 0
+    max_time_SEM = 0
     aux1 = 0
     aux2 = 0
     #######################
@@ -129,19 +131,23 @@ def calculate_SD_SEM_rmse(timestamp_rmse_dict, mean_rmse_data):
 
         if aux1 > max_SD:
             max_SD = aux1
+            max_time_SD = timestamp
         if aux2 > max_SEM:
             max_SEM = aux2
+            max_time_SEM = timestamp
 
         sum_squared_diff = 0
 
         SD_rmse_data.append({'Time (seconds)': timestamp, 'Standard Deviation': standard_deviation})
         SEM_rmse_data.append({'Time (seconds)': timestamp, 'Standard Error Mean': standard_error_mean})
 
-    return SD_rmse_data, SEM_rmse_data, max_SD, max_SEM
+    return SD_rmse_data, SEM_rmse_data, max_SD, max_SEM, max_time_SD, max_time_SEM
 
 # Function to plot the data
 def plot_data(all_data, mean_rmse_data, mean_rmse_SD_data, mean_rmse_SEM_data):
+    ############################
     # Plot mean rmse and rmse's
+    ############################
     plt.figure()
     
     for filename, data in all_data:
@@ -159,7 +165,9 @@ def plot_data(all_data, mean_rmse_data, mean_rmse_SD_data, mean_rmse_SEM_data):
     plt.legend()
     plt.grid(False)
 
+    ####################
     # Plot mean rmse SD
+    ####################
     plt.figure()
 
     SD_mean_times = [row['Time (seconds)'] for row in mean_rmse_SD_data]
@@ -171,7 +179,9 @@ def plot_data(all_data, mean_rmse_data, mean_rmse_SD_data, mean_rmse_SEM_data):
     plt.title('Standard Deviation of RMSE')
     plt.grid(False)
 
+    #####################
     # Plot mean rmse SEM
+    #####################
     plt.figure()
 
     SEM_mean_times = [row['Time (seconds)'] for row in mean_rmse_SEM_data]
@@ -183,25 +193,52 @@ def plot_data(all_data, mean_rmse_data, mean_rmse_SD_data, mean_rmse_SEM_data):
     plt.title('Standard Error Mean of RMSE')
     plt.grid(False)
 
-    # Plot the mean_rmse_values
+    #############################
+    # Plot the mean rmse +/- SEM
+    #############################
     plt.figure()
+
+    #############################################################
+    # THIS MAKES A SHADOW WITH FILLING
+    # Calculate the upper and lower bounds
+    upper_bounds = [mean_rmse_values[i] + mean_rmse_SEM_values[i] for i in range(len(mean_times))]
+    lower_bounds = [mean_rmse_values[i] - mean_rmse_SEM_values[i] for i in range(len(mean_times))]
+
+    # Plot the mean_rmse_values
     plt.plot(mean_times, mean_rmse_values, '-', label='Mean RMSE')
 
-    # Determine indices for error bars at specified intervals
-    indices = range(0, len(mean_times), 3)
+    # Fill between the upper and lower bounds
+    plt.fill_between(mean_times, lower_bounds, upper_bounds, color='gray', alpha=0.7, label='SEM Error Bounds')
+    #############################################################
 
-    # Plot the error bars at specified intervals
-    plt.errorbar([mean_times[i] for i in indices], 
-                 [mean_rmse_values[i] for i in indices], 
-                 yerr=[mean_rmse_SEM_values[i] for i in indices], 
-                 fmt='o', ecolor='black', capsize=5, markersize=2, label='Error Bars')
+    ############################################################
+    # # THIS MAKES BOXES OF ERROR
+    # # Determine indices for error bars at specified intervals
+    # indices = range(0, len(mean_times), 3)
+
+    # # Plot the mean_rmse_values
+    # plt.plot(mean_times, mean_rmse_values, '-', label='Mean RMSE')
+
+    # # Plot the error bars at specified intervals
+    # plt.errorbar([mean_times[i] for i in indices], 
+    #              [mean_rmse_values[i] for i in indices], 
+    #              yerr=[mean_rmse_SEM_values[i] for i in indices], 
+    #              fmt='o', ecolor='black', capsize=5, markersize=2, label='Error Bars')
+    ############################################################
 
     # Add labels and title
-    plt.xlabel('Time (seconds)')
-    plt.ylabel('yay')
-    plt.title('yay')
+    plt.xlabel('Time [seconds]')
+    plt.ylabel('RMSE mean [meters]')
+    plt.title('Micro-simultator data\nMean RMSE with SEM error bounds over Time')
+    # plt.title('Real data\nMean RMSE with SEM error bounds over Time')
     plt.grid(False)
     plt.legend()
+
+    # # Additional text annotations
+    # plt.text(10, 1.6, r'$\sigma_{hit} = 60$', fontsize=12)
+    # plt.text(10, 1.4, r'Maximum $SEM = 0.4 \, m$', fontsize=12)
+    # plt.text(10, 1.2, r'at $time = 2 \, s$', fontsize=12)
+
     plt.show()
 
 def main():
@@ -209,10 +246,9 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
     #######################################################
-    #   DEFINE THE NUMBER OF SIGMA AND CSV DATA NUMBER
+    #              DEFINE THE NUMBER OF SIGMA
     #######################################################
     sigma = 60
-    csv_data_num = 0
     
     #######################################################
     #           CHANGE FOR BUSCA OR MICROSIMULATOR
@@ -234,11 +270,11 @@ def main():
     # Calculate mean RMSE for each timestamp
     mean_rmse_data = calculate_mean_rmse(timestamp_rmse_dict)
 
-    mean_rmse_SD_data, mean_rmse_SEM_data, max_SD, max_SEM = calculate_SD_SEM_rmse(timestamp_rmse_dict, mean_rmse_data)
+    mean_rmse_SD_data, mean_rmse_SEM_data, max_SD, max_SEM, max_time_SD, max_time_SEM = calculate_SD_SEM_rmse(timestamp_rmse_dict, mean_rmse_data)
 
     # Print maximum values of SD and SEM
-    print("Maximum Standard Deviation (SD): ", max_SD)
-    print("Maximum Standard Mean Error (SEM): ", max_SEM)
+    print("Maximum Standard Deviation (SD):", max_SD, "at Time:", max_time_SD)
+    print("Maximum Standard Mean Error (SEM):", max_SEM, "at Time:", max_time_SEM)
 
     # Write the mean RMSE data to the new CSV file
     write_mean_csv(mean_csv_path, mean_rmse_data)

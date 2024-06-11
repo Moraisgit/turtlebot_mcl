@@ -37,13 +37,19 @@ def correct_timestamps(data, max_timestamp):
 def main():
     # Define the source and target directories
     script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    #######################################################
+    #             DEFINE THE NUMBER OF SIGMA 
+    #######################################################
+    sigma = 60
+
     #######################################################
     #           CHANGE FOR BUSCA OR MICROSIMULATOR
     #######################################################
-    # source_dir = os.path.join(script_dir, '../csv/busca')
-    # target_dir = os.path.join(script_dir, '../csv/busca/corrected_time')
-    source_dir = os.path.join(script_dir, '../csv/micro_simulator')
-    target_dir = os.path.join(script_dir, '../csv/micro_simulator/corrected_time')
+    # source_dir = os.path.join(script_dir, f'../csv/busca/sigma_{sigma}')
+    # target_dir = os.path.join(script_dir, f'../csv/busca/corrected_time/sigma_{sigma}')
+    source_dir = os.path.join(script_dir, f'../csv/micro_simulator/sigma_{sigma}')
+    target_dir = os.path.join(script_dir, f'../csv/micro_simulator/corrected_time/sigma_{sigma}')
 
     # Ensure the target directory exists
     os.makedirs(target_dir, exist_ok=True)
@@ -51,7 +57,7 @@ def main():
     #######################################################
     #          TIME FROM WHICH WE CUT THE CSV
     #######################################################
-    max_timestamp = 254
+    max_timestamp = 79
 
     # Process each CSV file in the source directory
     for filename in os.listdir(source_dir):
